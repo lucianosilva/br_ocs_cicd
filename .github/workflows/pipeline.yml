@@ -21,11 +21,11 @@ jobs:
       
       - name: Install Requirements
         run: pip install -r requirements.txt
-      
+ 
       - name: Unit Test
         run: python -m unittest -v test
   
-      - name: 'Write Config & Key Files'
+      - name: Write Config & Key Files
         run: |
           mkdir ~/.oci
           echo "[DEFAULT]" >> ~/.oci/config
@@ -36,7 +36,8 @@ jobs:
           echo "tenancy=${{secrets.OCI_TENANCY_ID}}" >> ~/.oci/config
           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
           echo "${{secrets.OCI_PUBLIC_KEY}}" >> ~/.oci/key.pem
-      - name: 'Install OCI CLI'
+ 
+      - name: Install OCI CLI
         run: |
           curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
           chmod +x install.sh
