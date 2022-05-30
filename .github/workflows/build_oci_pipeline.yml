@@ -1,5 +1,5 @@
 # Nome do Workflow
-name: OCI Pipeline
+name: Terraform OCI Pipeline
 
 # Evento que irá acionar a pipeline (actions)
 on: 
@@ -27,11 +27,21 @@ jobs:
   
       - name: Write Config & Key Files
         run: |
+          mkdir ~/.oci/
+          touch ~/.oci/key.pem
+          echo "${{secrets.OCI_PRIVATE_KEY}}" >> ~/.oci/key.pem
+          cat ~/.oci/key.pem
+
           touch ~/env-vars.sh
-          echo "#[DEFAULT]" >> ~/env-vars.sh
-          echo "TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/env-vars.sh
-          echo "TF_VAR_user_ocid=${{secrets.OCI_USER_ID}}" >> ~/env-vars.sh
-          echo "TF_VAR_fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/env-vars.sh
-          echo "TF_VAR_region=${{secrets.OCI_REGION}}" >> ~/env-vars.sh
-          echo "TF_VAR_private_key_path=~/.oci/key.pem" >> ~/env-vars.sh
-          echo "TF_VAR_ssh_public_key=${{secrets.OCI_PUBLIC_KEY}}" >> ~/env-vars.sh
+          echo "#!/bin/sh" >> ~/env-vars.sh
+          echo "# Required for the OCI Provider" >> ~/env-vars.sh
+          echo "export TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/env-vars.sh
+          echo "export TF_VAR_compartment_ocid=${{secrets.OCI_COMPARTMENT_ID}}" >> ~/env-vars.sh          
+          echo "export TF_VAR_user_ocid=${{secrets.OCI_USER_ID}}" >> ~/env-vars.sh
+          echo "export TF_VAR_fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/env-vars.sh
+          echo "export TF_VAR_private_key_path=~/.oci/key.pem" >> ~/env-vars.sh
+          echo "export TF_VAR_region=${{secrets.OCI_REGION}}" >> ~/env-vars.sh
+          echo "# Keys used to SSH to OCI VMs" >> ~/env-vars.sh
+          echo "export TF_VAR_ssh_public_key=${{secrets.OCI_SSH_PUB_KEY}}" >> ~/env-vars.sh
+          echo "export TF_VAR_ssh_private_key=${{secrets.OCI_SSH_PRIV_KEY}}" >> ~/env-vars.sh
+          cat ~/env-vars.sh
