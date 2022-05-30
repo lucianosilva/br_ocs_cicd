@@ -49,4 +49,12 @@ jobs:
 
       - name: Check Terraform Version
         run: terraform -v
-          
+
+      - name: Terraform
+        run: |
+        terraform init
+        terraform plan
+        terraform apply
+
+
+
