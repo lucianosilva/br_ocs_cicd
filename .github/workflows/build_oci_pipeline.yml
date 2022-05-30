@@ -33,11 +33,10 @@ jobs:
           mkdir ~/.oci
           touch ~/.oci/config
           echo "[DEFAULT]" >> ~/.oci/config
-          echo "user=${{secrets.OCI_USER_ID}}" >> ~/.oci/config
-          echo "fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config
-          # echo "pass_phrase=${{secrets.OCI_PASSPHRASE}}" >> ~/.oci/config
-          echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config
-          echo "tenancy=${{secrets.OCI_TENANCY_ID}}" >> ~/.oci/config
+          echo "TF_VAR_user_ocid=${{secrets.OCI_USER_ID}}" >> ~/.oci/config
+          echo "TF_VAR_fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config
+          echo "TF_VAR_region=${{secrets.OCI_REGION}}" >> ~/.oci/config
+          echo "TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/.oci/config
           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
           echo "${{secrets.OCI_PUBLIC_KEY}}" >> ~/.oci/key.pem
 

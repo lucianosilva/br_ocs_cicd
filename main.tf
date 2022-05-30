@@ -7,9 +7,9 @@ terraform {
 }
 
 provider "oci" {
-#  region              = "sa-saopaulo-1"
-  auth                = "SecurityToken"
-  config_file_profile = "HardToDie"
+  auth = "InstancePrincipal"
+  region = "${var.region}"
+#  config_file_profile = "HardToDie"
 }
 
 resource "oci_core_vcn" "internal" {
