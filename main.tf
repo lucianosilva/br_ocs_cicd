@@ -1,3 +1,30 @@
+variable "tenancy_ocid" {
+}
+
+variable "user_ocid" {
+}
+
+variable "fingerprint" {
+}
+
+variable "private_key_path" {
+}
+
+variable "compartment_ocid" {
+}
+
+variable "region" {
+}
+
+provider "oci" {
+  tenancy_ocid     = var.tenancy_ocid
+  user_ocid        = var.user_ocid
+  fingerprint      = var.fingerprint
+  private_key_path = var.private_key_path
+  region           = var.region
+  ignore_defined_tags      = ["testexamples-tag-namespace.tf-example-tag"]
+}
+
 terraform {
   required_providers {
     oci = {
@@ -6,18 +33,13 @@ terraform {
   }
 }
 
-provider "oci" {
-  auth = "InstancePrincipal"
-  tenancy_ocid = "ocid1.tenancy.oc1..aaaaaaaa7dtj7joj6p4fwbyb72nyguyegbggapbnhmyko7inzmlijk4n7eka"
-  user_ocid = "ocid1.user.oc1..aaaaaaaazbtucrdkg6k5icecpqh5omduocrmdcdkeahgxszdk5pn4mnip3za"
-  fingerprint = "ae:e2:c0:de:86:36:04:2b:b4:4f:a3:b0:63:2c:67:e2"
-  private_key_path = "~/.oci/key.pem"
-  region = "sa-saopaulo-1"
+resource "oci_core_vcn" "vcn" {
+  cidr_blocks    = ["10.0.0.0/16","11.0.0.0/16"]
+  dns_label      = "vcn_tf"
+  compartment_id = var.compartment_ocid
+  display_name   = "vcn_tf"
 }
 
-resource "oci_core_vcn" "internal" {
-  dns_label      = "internal"
-  cidr_block     = "10.0.0.0/16"
-  compartment_id = "ocid1.compartment.oc1..aaaaaaaa6cu4btpjaxboimomt63c6g5glewevoqksku4ggkpt3be4c5lo5ga"
-  display_name   = "vcn-20220211-1442"
+output "vcn_id" {
+  value = oci_core_vcn.vcn.id
 }

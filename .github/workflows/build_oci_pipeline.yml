@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+  pull_request
 
 jobs:
   Build:
@@ -22,26 +23,68 @@ jobs:
         with:
           python-version: 3.8
       
-      - name: Install Requirements
-        run: pip install -r requirements.txt
+ #     - name: Install Requirements
+ #       run: pip install -r requirements.txt
  
-      - name: Unit Test
-        run: python -m unittest -v test
+ #     - name: Unit Test
+ #       run: python -m unittest -v test
   
-      - name: Write Config & Key Files
+      - name: Write OCI Config File
         run: |
           mkdir ~/.oci
           touch ~/.oci/config
           echo "[DEFAULT]" >> ~/.oci/config
-          echo "TF_VAR_user_ocid=${{secrets.OCI_USER_ID}}" >> ~/.oci/config
-          echo "TF_VAR_fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config
-          echo "TF_VAR_region=${{secrets.OCI_REGION}}" >> ~/.oci/config
-          echo "TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/.oci/config
-          echo "key_file=~/.oci/key.pem" >> ~/.oci/config
-          echo "${{secrets.OCI_PUBLIC_KEY}}" >> ~/.oci/key.pem
+          echo "key_file=~/.oci/oci_api_key_public.pem" >> ~/.oci/config
+          echo "${{secrets.OCI_PRIVATE_KEY}}" >> ~/.oci/oci_api_key.pem
+          echo "${{secrets.OCI_PUBLIC_KEY}}" >> ~/.oci/oci_api_key_public.pem
+          chmod go-rwx ~/.oci/oci_api_key.pem
 
-      - name: Terraform Deploy
+      - name: Define TF Global Variables
         run: |
-          terraform init
-          terraform plan
-          terraform apply
+          echo "export TF_VAR_user_ocid=${{secrets.OCI_USER_ID}}" >> ~/.bash_profile
+          echo "export TF_VAR_fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.bash_profile
+          echo "export TF_VAR_region=${{secrets.OCI_REGION}}" >> ~/.bash_profile
+          echo "export TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/.bash_profile
+          echo "export TF_VAR_compartment_ocid=${{secrets.OCI_COMPARTMENT_ID}}" >> ~/.bash_profile
+          echo "export TF_VAR_private_key_path=~/.oci/oci_api_key.pem" >> ~/.bash_profile
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+            </details>
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
