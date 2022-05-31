@@ -29,7 +29,7 @@ jobs:
  #       run: python -m unittest -v test
   
   terraform:
-    depends: Build
+    needs: Build
     runs-on: ubuntu-latest
     steps:
       - name: Write OCI Config File
