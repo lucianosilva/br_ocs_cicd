@@ -28,8 +28,6 @@ provider "oci" {
   fingerprint      = var.fingerprint
   private_key_path = var.private_key_path
   region           = var.region
-  oci_username         = var.username
-  oci_user_authtoken   = var.user_authtoken
 }
 
 terraform {

@@ -33,6 +33,8 @@ jobs:
           mkdir ~/.oci
           touch ~/.oci/config
           echo "[DEFAULT]" >> ~/.oci/config
+          echo "oci_username=${{secrets.OCI_USERNAME}}" >> ~/.oci/config
+          echo "oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> ~/.oci/config
           echo "key_file=~/.oci/oci_api_key_public.pem" >> ~/.oci/config
           echo "${{secrets.OCI_PRIVATE_KEY}}" >> ~/.oci/oci_api_key.pem
           echo "${{secrets.OCI_PUBLIC_KEY}}" >> ~/.oci/oci_api_key_public.pem
@@ -46,8 +48,6 @@ jobs:
           echo "export TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/.bash_profile
           echo "export TF_VAR_compartment_ocid=${{secrets.OCI_COMPARTMENT_ID}}" >> ~/.bash_profile
           echo "export TF_VAR_private_key_path=~/.oci/oci_api_key.pem" >> ~/.bash_profile
-          echo "export TF_VAR_username=${{secrets.OCI_USERNAME}}" >> ~/.bash_profile
-          echo "export TF_VAR_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> ~/.bash_profile
 
       - name: Terraform Init
         id: init
