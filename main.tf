@@ -16,6 +16,12 @@ variable "compartment_ocid" {
 variable "region" {
 }
 
+variable "oci_user_authtoken" {
+}
+
+variable "oci_username" {
+}
+
 provider "oci" {
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid
