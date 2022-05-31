@@ -16,13 +16,20 @@ variable "compartment_ocid" {
 variable "region" {
 }
 
+variable "user_authtoken" {
+}
+
+variable "username" {
+}
+
 provider "oci" {
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid
   fingerprint      = var.fingerprint
   private_key_path = var.private_key_path
   region           = var.region
-  ignore_defined_tags      = ["testexamples-tag-namespace.tf-example-tag"]
+  username         = var.username
+  user_authtoken   = var.user_authtoken
 }
 
 terraform {
