@@ -62,7 +62,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out config.tfplan
+        run: terraform plan -var tenancy_ocid=${{secrets.OCI_TENANCY_ID}} -out config.tfplan
 
       - name: Terraform Apply
         id: apply
