@@ -16,22 +16,18 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@v3
-      
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      
+
  #     - name: Install Requirements
  #       run: pip install -r requirements.txt
  
  #     - name: Unit Test
  #       run: python -m unittest -v test
-  
-  terraform:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Write OCI Config File
         run: |
           mkdir /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci
