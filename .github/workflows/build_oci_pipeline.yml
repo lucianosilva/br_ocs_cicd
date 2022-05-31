@@ -22,12 +22,6 @@ jobs:
         with:
           python-version: 3.8
 
- #     - name: Install Requirements
- #       run: pip install -r requirements.txt
- 
- #     - name: Unit Test
- #       run: python -m unittest -v test
-
       - name: Write OCI Config File
         run: |
           mkdir /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci
@@ -37,8 +31,6 @@ jobs:
           echo "oci_username=${{secrets.OCI_USERNAME}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
           echo "oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
           echo "key_file=/home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key_public.pem" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
-#          echo "${{secrets.OCI_PRIVATE_KEY}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem
-#          echo "${{secrets.OCI_PUBLIC_KEY}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key_public.pem
           echo "To create the API signing key"
           openssl genrsa -out /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem 2048
           chmod go-rwx /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem
