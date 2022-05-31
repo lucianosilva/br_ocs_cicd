@@ -37,7 +37,7 @@ jobs:
           mkdir /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci
           touch /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
           pwd
-          echo "[DEFAULT]" >> ~/.oci/config
+          echo "[DEFAULT]" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
           echo "oci_username=${{secrets.OCI_USERNAME}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
           echo "oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
           echo "key_file=/home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key_public.pem" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
