@@ -34,15 +34,16 @@ jobs:
     steps:
       - name: Write OCI Config File
         run: |
-          mkdir ~/.oci
-          touch ~/.oci/config
+          mkdir /home/runner/.oci
+          touch /home/runner/.oci/config
+          pwd
           echo "[DEFAULT]" >> ~/.oci/config
-          echo "oci_username=${{secrets.OCI_USERNAME}}" >> ~/.oci/config
-          echo "oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> ~/.oci/config
-          echo "key_file=/home/runner/work/.oci/oci_api_key_public.pem" >> ~/.oci/config
-          echo "${{secrets.OCI_PRIVATE_KEY}}" >> ~/.oci/oci_api_key.pem
-          echo "${{secrets.OCI_PUBLIC_KEY}}" >> ~/.oci/oci_api_key_public.pem
-          chmod go-rwx ~/.oci/oci_api_key.pem
+          echo "oci_username=${{secrets.OCI_USERNAME}}" >> /home/runner/.oci/config
+          echo "oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> /home/runner/.oci/config
+          echo "key_file=/home/runner/.oci/oci_api_key_public.pem" >> /home/runner/.oci/config
+          echo "${{secrets.OCI_PRIVATE_KEY}}" >> /home/runner/.oci/oci_api_key.pem
+          echo "${{secrets.OCI_PUBLIC_KEY}}" >> /home/runner/.oci/oci_api_key_public.pem
+          chmod go-rwx /home/runner/.oci/oci_api_key.pem
 
       - name: Define TF Global Variables
         run: |
@@ -51,7 +52,7 @@ jobs:
           echo "export TF_VAR_region=${{secrets.OCI_REGION}}" >> ~/.bash_profile
           echo "export TF_VAR_tenancy_ocid=${{secrets.OCI_TENANCY_ID}}" >> ~/.bash_profile
           echo "export TF_VAR_compartment_ocid=${{secrets.OCI_COMPARTMENT_ID}}" >> ~/.bash_profile
-          echo "export TF_VAR_private_key_path=/home/runner/work/.oci/oci_api_key.pem" >> ~/.bash_profile
+          echo "export TF_VAR_private_key_path=/home/runner/.oci/oci_api_key.pem" >> ~/.bash_profile
           echo "export TF_VAR_oci_username=${{secrets.OCI_USERNAME}}" >> ~/.bash_profile
           echo "export TF_VAR_oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> ~/.bash_profile
 
