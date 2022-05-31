@@ -52,13 +52,13 @@ jobs:
           echo "export TF_VAR_oci_username=${{secrets.OCI_USERNAME}}" >> ~/.bash_profile
           echo "export TF_VAR_oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> ~/.bash_profile
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-
       - name: Terraform Init
         id: init
         run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
 
       - name: Terraform Plan
         id: plan
