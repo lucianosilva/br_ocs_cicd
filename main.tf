@@ -45,6 +45,10 @@ resource "oci_core_vcn" "vcn" {
   display_name   = "vcn"
 }
 
+# Output
+
+output "getCompartmentId" { value = var.compartment_ocid }
+
 output "vcn_id" {
   value = oci_core_vcn.vcn.id
 }
