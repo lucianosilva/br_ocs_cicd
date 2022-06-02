@@ -37,7 +37,7 @@ jobs:
           echo "export TF_VAR_compartment_ocid=${{secrets.OCI_COMPARTMENT_ID}}" >> ~/.bash_profile
           echo "export TF_VAR_private_key_path=/home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem" >> ~/.bash_profile
           echo "export TF_VAR_oci_username=${{secrets.OCI_USERNAME}}" >> ~/.bash_profile
-          echo "export TF_VAR_oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> ~/.bash_profile
+          echo "export TF_VAR_oci_user_authtoken="${{secrets.OCI_USER_AUTHTOKEN}}"" >> ~/.bash_profile
           . ~/.bash_profile
 
       - name: Terraform Init
