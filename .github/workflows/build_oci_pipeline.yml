@@ -24,18 +24,9 @@ jobs:
 
       - name: Write OCI Config File
         run: |
-          mkdir /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci
-          touch /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
+          ls -ltr
+          ls -ltr .oci
           pwd
-          echo "[DEFAULT]" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
-          echo "oci_username=${{secrets.OCI_USERNAME}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
-          echo "oci_user_authtoken=${{secrets.OCI_USER_AUTHTOKEN}}" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
-          echo "key_file=/home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key_public.pem" >> /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/config
-          echo "To create the API signing key"
-          openssl genrsa -out /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem 2048
-          chmod go-rwx /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem
-          echo "To generate the public key for the given private key"
-          openssl rsa -pubout -in /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key.pem -out /home/runner/work/br_ocs_cicd/br_ocs_cicd/.oci/oci_api_key_public.pem
 
       - name: Define TF Global Variables
         run: |
@@ -60,8 +51,8 @@ jobs:
         id: plan
         run: |
           echo "ID=${{secrets.OCI_TENANCY_ID}}"
-          terraform plan -var tenancy_ocid=${{secrets.OCI_TENANCY_ID}} -out config.tfplan
+          terraform plan -out config.tfplan
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve
+        run: terraform apply config.tfplan -auto-approve
