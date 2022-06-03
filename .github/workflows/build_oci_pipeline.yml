@@ -49,7 +49,7 @@ jobs:
           echo "export TF_VAR_private_key_path=~/.oci/oci_api_key.pem" >> ~/.bash_profile
           echo "export TF_VAR_oci_username=${{secrets.OCI_USERNAME}}" >> ~/.bash_profile
           echo "export TF_VAR_oci_user_authtoken=\"${{secrets.OCI_USER_AUTHTOKEN}}\"" >> ~/.bash_profile
-          echo "export TF_LOG=\"DEBUG\"" >> ~/.bash_profile
+          echo "export TF_LOG=DEBUG" >> ~/.bash_profile
           . ~/.bash_profile
 
       - name: Terraform Init
@@ -62,8 +62,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: |
-          terraform plan -out config.tfplan
+        run: terraform plan -out config.tfplan
 
       - name: Terraform Apply
         id: apply
